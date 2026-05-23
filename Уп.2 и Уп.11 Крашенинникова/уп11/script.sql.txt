@@ -1,0 +1,37 @@
+CREATE TABLE statuses (
+    status_id SERIAL PRIMARY KEY,
+    status_name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE movies (
+    movie_id SERIAL PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    release_year INT,
+    genre VARCHAR(100),
+    rating VARCHAR(10),
+    img_url TEXT,
+    status_id INT REFERENCES statuses(status_id) ON DELETE SET NULL
+);
+
+CREATE TABLE reviews (
+    review_id SERIAL PRIMARY KEY,
+    movie_id INT UNIQUE REFERENCES movies(movie_id) ON DELETE CASCADE,
+    description TEXT
+);
+
+
+INSERT INTO statuses (status_name) VALUES 
+('В планах'), 
+('Смотрю'), 
+('Оценено');
+
+
+INSERT INTO movies (title, release_year, genre, rating, img_url, status_id) VALUES
+('Зверополис', 2016, 'Мультфильм, Комедия', '9.0', 'https://example.com/zootopia.jpg', 3),
+('Дьявол носит Prada', 2006, 'Драма, Комедия', '8.5', 'https://example.com/prada.jpg', 3),
+('Линчеватель', 2023, 'Боевик, Криминал', '8.8', 'https://example.com/vigilante.jpg', 2);
+
+INSERT INTO reviews (movie_id, description) VALUES
+(1, 'История про зайку-полицейского Джуди Хопс и хитрого лиса Ника Уайлда в огромном городе животных.'),
+(2, 'Молодая девушка Энди получает работу ассистентки у известного редактора модного журнала.'),
+(3, 'История о студенте полицейской академии, который по выходным вершит самосуд над преступниками.');

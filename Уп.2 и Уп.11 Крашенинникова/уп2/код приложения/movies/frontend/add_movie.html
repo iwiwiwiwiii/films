@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Добавить фильм</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<nav class="sidebar">
+    <div class="logo">MyMovies<span>DB</span></div>
+    <a href="index.html">Фильмы</a>
+    <a href="add_movie.html" class="active">Добавить</a>
+    <a href="plans.html">Планы</a>
+</nav>
+<div class="main-content">
+    <header>Добавить новый фильм</header>
+    <main class="content-area">
+        <form id="add-movie-form" style="max-width: 500px; display: flex; flex-direction: column; gap: 15px;">
+            <input type="text" id="title" placeholder="Название фильма" required style="padding: 10px; background: #1e293b; border: 1px solid #334155; color: white; border-radius: 5px;">
+            <input type="text" id="year" placeholder="Год выпуска" required style="padding: 10px; background: #1e293b; border: 1px solid #334155; color: white; border-radius: 5px;">
+            <input type="text" id="img" placeholder="Ссылка на обложку (URL)" required style="padding: 10px; background: #1e293b; border: 1px solid #334155; color: white; border-radius: 5px;">
+            <select id="status" style="padding: 10px; background: #1e293b; border: 1px solid #334155; color: white; border-radius: 5px;">
+                <option value="ХОЧУ ПОСМОТРЕТЬ">Хочу посмотреть</option>
+                <option value="СМОТРЮ">Смотрю</option>
+                <option value="ОЦЕНЕНО">Оценено</option>
+            </select>
+            <select id="rating" style="padding: 10px; background: #1e293b; border: 1px solid #334155; color: white; border-radius: 5px;">
+                <option value="★★★★★">★★★★★</option>
+                <option value="★★★★☆">★★★★☆</option>
+                <option value="★★★☆☆">★★★☆☆</option>
+                <option value="★★☆☆☆">★★☆☆☆</option>
+                <option value="★☆☆☆☆">★☆☆☆☆</option>
+            </select>
+            <button type="submit" style="padding: 12px; background: #ef4444; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Сохранить фильм</button>
+        </form>
+    </main>
+</div>
+
+<script>
+    const API_URL = 'http://localhost:8000/api/movies';
+
+    document.getElementById('add-movie-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const newMovie = {
+            title: document.getElementById('title').value,
+            year: document.getElementById('year').value,
+            img: document.getElementById('img').value,
+            status: document.getElementById('status').value,
+            rating: document.getElementById('rating').value
+        };
+
+        try {
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newMovie)
+            });
+
+            if (response.ok) {
+                alert('Фильм успешно добавлен на сервер!');
+                window.location.href = 'index.html';
+            } else {
+                throw new Error('Ошибка сервера');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Не удалось сохранить фильм на сервере.');
+        }
+    });
+</script>
+</body>
+</html>
